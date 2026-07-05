@@ -1,0 +1,919 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxe Living - Modern Furniture</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Raleway:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .font-display {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .font-body {
+      font-family: 'Raleway', sans-serif;
+    }
+
+    /* Navbar animations */
+    .nav-link {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      transform: translateX(-101%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-link:hover::after {
+      transform: translateX(0);
+    }
+
+    /* Scroll-triggered navbar */
+    .navbar {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .navbar.scrolled {
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Fade in animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fade-in-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .fade-in-right {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fade-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Scale animation for cards */
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .scale-in.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Product card hover effects */
+    .product-card {
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.5s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-card .product-image {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.08);
+    }
+
+    /* Button animations */
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    /* Floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    /* Staggered animations */
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+
+    /* Mobile menu animation */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+
+    /* Hamburger animation */
+    .hamburger span {
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+
+    /* Parallax effect */
+    .parallax-bg {
+      transition: transform 0.1s linear;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #8B7355;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6B5344;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body overflow-x-hidden">
+  <div id="app-wrapper" class="w-full h-full overflow-auto"><!-- Navbar -->
+   <nav class="navbar fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-500" id="navbar">
+    <div class="max-w-7xl mx-auto flex items-center justify-between"><!-- Logo --> <a href="#home" class="flex items-center gap-2 group">
+      <svg class="w-10 h-10 transition-transform duration-300 group-hover:rotate-12" viewbox="0 0 50 50" fill="none"><rect x="5" y="20" width="40" height="25" rx="2" fill="#8B7355" /> <rect x="10" y="10" width="30" height="12" rx="1" fill="#A68B5B" /> <circle cx="15" cy="48" r="3" fill="#6B5344" /> <circle cx="35" cy="48" r="3" fill="#6B5344" />
+      </svg><span class="font-display text-2xl font-bold text-stone-800">Luxe Living</span> </a> <!-- Desktop Navigation -->
+     <div class="hidden md:flex items-center gap-8"><a href="#home" class="nav-link text-stone-700 font-medium hover:text-amber-700 py-2">Home</a> <a href="#products" class="nav-link text-stone-700 font-medium hover:text-amber-700 py-2">Products</a> <a href="#about" class="nav-link text-stone-700 font-medium hover:text-amber-700 py-2">About</a> <a href="#collections" class="nav-link text-stone-700 font-medium hover:text-amber-700 py-2">Collections</a> <a href="#contact" class="nav-link text-stone-700 font-medium hover:text-amber-700 py-2">Contact</a>
+     </div><!-- CTA Button -->
+     <div class="hidden md:block"><button class="btn-primary bg-amber-700 text-white px-6 py-3 rounded-full font-medium hover:bg-amber-800 hover:shadow-lg"> Shop Now </button>
+     </div><!-- Mobile Menu Button --> <button class="hamburger md:hidden flex flex-col gap-1.5 p-2" id="hamburger"> <span class="w-6 h-0.5 bg-stone-800 block"></span> <span class="w-6 h-0.5 bg-stone-800 block"></span> <span class="w-6 h-0.5 bg-stone-800 block"></span> </button>
+    </div>
+   </nav><!-- Mobile Menu -->
+   <div class="mobile-menu fixed top-0 right-0 w-72 h-full bg-white shadow-2xl z-50 p-8 pt-20" id="mobileMenu"><button class="absolute top-6 right-6 text-stone-600 hover:text-stone-900" id="closeMenu">
+     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+     </svg></button>
+    <div class="flex flex-col gap-6"><a href="#home" class="text-stone-700 font-medium text-lg hover:text-amber-700 transition-colors">Home</a> <a href="#products" class="text-stone-700 font-medium text-lg hover:text-amber-700 transition-colors">Products</a> <a href="#about" class="text-stone-700 font-medium text-lg hover:text-amber-700 transition-colors">About</a> <a href="#collections" class="text-stone-700 font-medium text-lg hover:text-amber-700 transition-colors">Collections</a> <a href="#contact" class="text-stone-700 font-medium text-lg hover:text-amber-700 transition-colors">Contact</a> <button class="btn-primary bg-amber-700 text-white px-6 py-3 rounded-full font-medium hover:bg-amber-800 mt-4"> Shop Now </button>
+    </div>
+   </div><!-- Hero Section -->
+   <section id="home" class="relative min-h-screen flex items-center overflow-hidden" style="background: linear-gradient(135deg, #faf7f2 0%, #f5ebe0 50%, #e8dcc8 100%);"><!-- Decorative Elements -->
+    <div class="absolute top-20 right-10 w-72 h-72 bg-amber-200 rounded-full opacity-30 blur-3xl float-animation"></div>
+    <div class="absolute bottom-20 left-10 w-96 h-96 bg-stone-300 rounded-full opacity-20 blur-3xl float-animation" style="animation-delay: 2s;"></div>
+    <div class="max-w-7xl mx-auto px-6 py-32 grid lg:grid-cols-2 gap-12 items-center relative z-10"><!-- Text Content -->
+     <div class="space-y-8">
+      <div class="fade-in"><span class="inline-block bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-4"> ✨ New Collection 2024 </span>
+      </div>
+      <h1 id="hero-title" class="font-display text-5xl md:text-7xl font-bold text-stone-900 leading-tight fade-in stagger-1">Crafting Comfort, <br><span class="text-amber-700">Defining Style</span></h1>
+      <p id="hero-subtitle" class="text-stone-600 text-lg md:text-xl max-w-lg fade-in stagger-2">Discover handcrafted furniture that transforms your space into a sanctuary of elegance and comfort.</p>
+      <div class="flex flex-wrap gap-4 fade-in stagger-3"><button id="cta-button" class="btn-primary bg-stone-900 text-white px-8 py-4 rounded-full font-medium hover:bg-stone-800 flex items-center gap-2"> Explore Collection 
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg></button> <button class="border-2 border-stone-300 text-stone-700 px-8 py-4 rounded-full font-medium hover:border-amber-700 hover:text-amber-700 transition-all"> View Catalog </button>
+      </div><!-- Stats -->
+      <div class="flex gap-12 pt-8 fade-in stagger-4">
+       <div>
+        <p class="font-display text-4xl font-bold text-stone-900">15K+</p>
+        <p class="text-stone-500 text-sm">Happy Customers</p>
+       </div>
+       <div>
+        <p class="font-display text-4xl font-bold text-stone-900">500+</p>
+        <p class="text-stone-500 text-sm">Unique Designs</p>
+       </div>
+       <div>
+        <p class="font-display text-4xl font-bold text-stone-900">25+</p>
+        <p class="text-stone-500 text-sm">Years Experience</p>
+       </div>
+      </div>
+     </div><!-- Hero Image -->
+     <div class="relative fade-in-right">
+      <div class="relative bg-gradient-to-br from-amber-100 to-stone-200 rounded-3xl overflow-hidden"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&amp;h=600&amp;fit=crop" alt="Luxury Living Room Setup" class="w-full h-80 md:h-96 object-cover float-animation" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #f5ebe0 0%, #e8dcc8 100%)'; this.alt='Image unavailable';"> <!-- Decorative badge -->
+       <div class="absolute top-4 right-4 bg-white rounded-full px-4 py-2 shadow-lg"><span class="text-amber-700 font-bold">-30% OFF</span>
+       </div>
+      </div><!-- Floating card -->
+      <div class="absolute -bottom-6 -left-6 bg-white rounded-2xl p-4 shadow-xl scale-in">
+       <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+         <svg class="w-6 h-6 text-amber-700" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-bold text-stone-900">4.9 Rating</p>
+         <p class="text-stone-500 text-sm">2,500+ Reviews</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 fade-in">
+     <div class="flex flex-col items-center gap-2 text-stone-400"><span class="text-sm">Scroll to explore</span>
+      <div class="w-6 h-10 border-2 border-stone-300 rounded-full flex justify-center pt-2">
+       <div class="w-1.5 h-3 bg-amber-700 rounded-full animate-bounce"></div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Products Section -->
+   <section id="products" class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6"><!-- Section Header -->
+     <div class="text-center mb-16"><span class="text-amber-700 font-medium fade-in">Our Products</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-stone-900 mt-2 fade-in stagger-1">Featured Furniture</h2>
+      <p class="text-stone-600 mt-4 max-w-2xl mx-auto fade-in stagger-2">Each piece is meticulously crafted to bring harmony between aesthetics and functionality.</p>
+     </div><!-- Category Tabs -->
+     <div class="flex flex-wrap justify-center gap-4 mb-12 fade-in"><button class="px-6 py-3 bg-stone-900 text-white rounded-full font-medium transition-all hover:bg-amber-700">All</button> <button class="px-6 py-3 bg-stone-100 text-stone-700 rounded-full font-medium transition-all hover:bg-stone-200">Living Room</button> <button class="px-6 py-3 bg-stone-100 text-stone-700 rounded-full font-medium transition-all hover:bg-stone-200">Bedroom</button> <button class="px-6 py-3 bg-stone-100 text-stone-700 rounded-full font-medium transition-all hover:bg-stone-200">Dining</button> <button class="px-6 py-3 bg-stone-100 text-stone-700 rounded-full font-medium transition-all hover:bg-stone-200">Office</button>
+     </div><!-- Products Grid -->
+     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8"><!-- Product 1 -->
+      <div class="product-card bg-stone-50 rounded-3xl overflow-hidden scale-in stagger-1">
+       <div class="relative overflow-hidden"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&amp;h=400&amp;fit=crop" alt="Modern Armchair" class="product-image w-full h-64 object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #8B7355 0%, #A68B5B 100%)'; this.alt='Image unavailable';"> <span class="absolute top-4 left-4 bg-amber-500 text-white text-xs px-3 py-1 rounded-full">New</span> <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-amber-50 transition-colors">
+         <svg class="w-5 h-5 text-stone-400 hover:text-red-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+         </svg></button>
+       </div>
+       <div class="p-6">
+        <p class="text-stone-400 text-sm">Armchair</p>
+        <h3 class="font-display text-xl font-bold text-stone-900 mt-1">Milano Lounge</h3>
+        <div class="flex items-center justify-between mt-4">
+         <div><span class="text-amber-700 font-bold text-xl">$849</span> <span class="text-stone-400 line-through text-sm ml-2">$1,099</span>
+         </div><button class="w-10 h-10 bg-stone-900 rounded-full flex items-center justify-center hover:bg-amber-700 transition-colors">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg></button>
+        </div>
+       </div>
+      </div><!-- Product 2 -->
+      <div class="product-card bg-stone-50 rounded-3xl overflow-hidden scale-in stagger-2">
+       <div class="relative overflow-hidden"><img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&amp;h=400&amp;fit=crop" alt="Dining Table" class="product-image w-full h-64 object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #6B5344 0%, #8B7355 100%)'; this.alt='Image unavailable';"> <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-amber-50 transition-colors">
+         <svg class="w-5 h-5 text-stone-400 hover:text-red-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+         </svg></button>
+       </div>
+       <div class="p-6">
+        <p class="text-stone-400 text-sm">Dining Table</p>
+        <h3 class="font-display text-xl font-bold text-stone-900 mt-1">Nordic Oak</h3>
+        <div class="flex items-center justify-between mt-4"><span class="text-amber-700 font-bold text-xl">$1,299</span> <button class="w-10 h-10 bg-stone-900 rounded-full flex items-center justify-center hover:bg-amber-700 transition-colors">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg></button>
+        </div>
+       </div>
+      </div><!-- Product 3 -->
+      <div class="product-card bg-stone-50 rounded-3xl overflow-hidden scale-in stagger-3">
+       <div class="relative overflow-hidden"><img src="https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&amp;h=400&amp;fit=crop" alt="Modular Bookshelf" class="product-image w-full h-64 object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #6B5344 0%, #8B7355 100%)'; this.alt='Image unavailable';"> <span class="absolute top-4 left-4 bg-green-500 text-white text-xs px-3 py-1 rounded-full">Bestseller</span> <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-amber-50 transition-colors">
+         <svg class="w-5 h-5 text-stone-400 hover:text-red-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+         </svg></button>
+       </div>
+       <div class="p-6">
+        <p class="text-stone-400 text-sm">Storage</p>
+        <h3 class="font-display text-xl font-bold text-stone-900 mt-1">Modular Shelf</h3>
+        <div class="flex items-center justify-between mt-4"><span class="text-amber-700 font-bold text-xl">$599</span> <button class="w-10 h-10 bg-stone-900 rounded-full flex items-center justify-center hover:bg-amber-700 transition-colors">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg></button>
+        </div>
+       </div>
+      </div><!-- Product 4 -->
+      <div class="product-card bg-stone-50 rounded-3xl overflow-hidden scale-in stagger-4">
+       <div class="relative overflow-hidden"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&amp;h=400&amp;fit=crop" alt="Modern Bed Frame" class="product-image w-full h-64 object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #8B7355 0%, #A68B5B 100%)'; this.alt='Image unavailable';"> <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-amber-50 transition-colors">
+         <svg class="w-5 h-5 text-stone-400 hover:text-red-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+         </svg></button>
+       </div>
+       <div class="p-6">
+        <p class="text-stone-400 text-sm">Bedroom</p>
+        <h3 class="font-display text-xl font-bold text-stone-900 mt-1">Cloud Bed Frame</h3>
+        <div class="flex items-center justify-between mt-4"><span class="text-amber-700 font-bold text-xl">$1,899</span> <button class="w-10 h-10 bg-stone-900 rounded-full flex items-center justify-center hover:bg-amber-700 transition-colors">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg></button>
+        </div>
+       </div>
+      </div>
+     </div><!-- View All Button -->
+     <div class="text-center mt-12 fade-in"><button class="btn-primary border-2 border-stone-900 text-stone-900 px-8 py-4 rounded-full font-medium hover:bg-stone-900 hover:text-white transition-all"> View All Products </button>
+     </div>
+    </div>
+   </section><!-- About Section -->
+   <section id="about" class="py-24" style="background: linear-gradient(180deg, #f5ebe0 0%, #faf7f2 100%);">
+    <div class="max-w-7xl mx-auto px-6">
+     <div class="grid lg:grid-cols-2 gap-16 items-center"><!-- Image Side -->
+      <div class="relative fade-in-left">
+       <div class="bg-amber-100 rounded-3xl overflow-hidden relative"><img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&amp;h=600&amp;fit=crop" alt="Luxury Furniture Craftsmanship" class="w-full h-80 object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #f5ebe0 0%, #d4b896 100%)'; this.alt='Image unavailable';">
+       </div><!-- Experience badge -->
+       <div class="absolute -bottom-8 -right-4 bg-amber-700 text-white rounded-2xl p-6 shadow-xl scale-in">
+        <p class="font-display text-4xl font-bold">25+</p>
+        <p class="text-amber-100">Years of Craftsmanship</p>
+       </div>
+      </div><!-- Content Side -->
+      <div class="space-y-6"><span class="text-amber-700 font-medium fade-in">About Us</span>
+       <h2 id="about-title" class="font-display text-4xl md:text-5xl font-bold text-stone-900 fade-in stagger-1">Where Artistry Meets Functionality</h2>
+       <p class="text-stone-600 text-lg leading-relaxed fade-in stagger-2">For over two decades, we've been transforming raw materials into timeless pieces that tell a story. Our master craftsmen combine traditional techniques with modern design principles.</p>
+       <p class="text-stone-600 leading-relaxed fade-in stagger-3">Every piece of furniture that leaves our workshop carries the mark of dedication, precision, and an unwavering commitment to quality that has defined our brand since 1999.</p><!-- Features -->
+       <div class="grid grid-cols-2 gap-6 pt-6">
+        <div class="flex items-start gap-4 fade-in stagger-2">
+         <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+         </div>
+         <div>
+          <h4 class="font-bold text-stone-900">Premium Quality</h4>
+          <p class="text-stone-500 text-sm">Handpicked materials</p>
+         </div>
+        </div>
+        <div class="flex items-start gap-4 fade-in stagger-3">
+         <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+         </div>
+         <div>
+          <h4 class="font-bold text-stone-900">Timeless Design</h4>
+          <p class="text-stone-500 text-sm">Built to last generations</p>
+         </div>
+        </div>
+        <div class="flex items-start gap-4 fade-in stagger-4">
+         <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+          </svg>
+         </div>
+         <div>
+          <h4 class="font-bold text-stone-900">Eco-Friendly</h4>
+          <p class="text-stone-500 text-sm">Sustainable practices</p>
+         </div>
+        </div>
+        <div class="flex items-start gap-4 fade-in stagger-4">
+         <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+         </div>
+         <div>
+          <h4 class="font-bold text-stone-900">Expert Team</h4>
+          <p class="text-stone-500 text-sm">Master craftsmen</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Collections Banner -->
+   <section id="collections" class="py-24 bg-stone-900 relative overflow-hidden"><!-- Background pattern -->
+    <div class="absolute inset-0 opacity-10">
+     <svg class="w-full h-full" viewbox="0 0 100 100" preserveaspectratio="none"><pattern id="grid" width="10" height="10" patternunits="userSpaceOnUse">
+       <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" />
+      </pattern> <rect width="100" height="100" fill="url(#grid)" />
+     </svg>
+    </div>
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+     <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-6"><span class="text-amber-400 font-medium fade-in">2024 Collection</span>
+       <h2 class="font-display text-4xl md:text-6xl font-bold text-white fade-in stagger-1">Discover the<br><span class="text-amber-400">Scandinavian</span> Series</h2>
+       <p class="text-stone-300 text-lg fade-in stagger-2">Minimalist designs inspired by Nordic aesthetics. Clean lines, natural materials, and functional beauty come together in our newest collection.</p><button class="btn-primary bg-amber-600 text-white px-8 py-4 rounded-full font-medium hover:bg-amber-500 inline-flex items-center gap-2 fade-in stagger-3"> Explore Collection 
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg></button>
+      </div>
+      <div class="grid grid-cols-2 gap-4 fade-in-right">
+       <div class="bg-stone-800 rounded-2xl overflow-hidden hover:bg-stone-700 transition-colors cursor-pointer"><img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400&amp;h=300&amp;fit=crop" alt="Modern Sofas Collection" class="w-full h-32 object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #6B5344 0%, #8B7355 100%)'; this.alt='Image unavailable';">
+        <div class="p-4">
+         <h4 class="text-white font-bold">Sofas</h4>
+         <p class="text-stone-400 text-sm">24 pieces</p>
+        </div>
+       </div>
+       <div class="bg-stone-800 rounded-2xl overflow-hidden hover:bg-stone-700 transition-colors cursor-pointer"><img src="https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=400&amp;h=300&amp;fit=crop" alt="Storage Cabinets Collection" class="w-full h-32 object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #6B5344 0%, #8B7355 100%)'; this.alt='Image unavailable';">
+        <div class="p-4">
+         <h4 class="text-white font-bold">Cabinets</h4>
+         <p class="text-stone-400 text-sm">18 pieces</p>
+        </div>
+       </div>
+       <div class="bg-stone-800 rounded-2xl overflow-hidden hover:bg-stone-700 transition-colors cursor-pointer"><img src="https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=400&amp;h=300&amp;fit=crop" alt="Dining Tables Collection" class="w-full h-32 object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #6B5344 0%, #8B7355 100%)'; this.alt='Image unavailable';">
+        <div class="p-4">
+         <h4 class="text-white font-bold">Tables</h4>
+         <p class="text-stone-400 text-sm">32 pieces</p>
+        </div>
+       </div>
+       <div class="bg-stone-800 rounded-2xl overflow-hidden hover:bg-stone-700 transition-colors cursor-pointer"><img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=400&amp;h=300&amp;fit=crop" alt="Designer Chairs Collection" class="w-full h-32 object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #6B5344 0%, #8B7355 100%)'; this.alt='Image unavailable';">
+        <div class="p-4">
+         <h4 class="text-white font-bold">Chairs</h4>
+         <p class="text-stone-400 text-sm">45 pieces</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Testimonials -->
+   <section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+     <div class="text-center mb-16"><span class="text-amber-700 font-medium fade-in">Testimonials</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-stone-900 mt-2 fade-in stagger-1">What Our Customers Say</h2>
+     </div>
+     <div class="grid md:grid-cols-3 gap-8"><!-- Testimonial 1 -->
+      <div class="bg-stone-50 rounded-3xl p-8 scale-in stagger-1 hover:shadow-lg transition-shadow">
+       <div class="flex gap-1 mb-4">
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+       </div>
+       <p class="text-stone-600 mb-6">"The quality of craftsmanship is outstanding. Our living room has been completely transformed with their Nordic sofa collection."</p>
+       <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center text-amber-800 font-bold">
+         SM
+        </div>
+        <div>
+         <p class="font-bold text-stone-900">Sarah Mitchell</p>
+         <p class="text-stone-500 text-sm">Interior Designer</p>
+        </div>
+       </div>
+      </div><!-- Testimonial 2 -->
+      <div class="bg-stone-50 rounded-3xl p-8 scale-in stagger-2 hover:shadow-lg transition-shadow">
+       <div class="flex gap-1 mb-4">
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+       </div>
+       <p class="text-stone-600 mb-6">"Exceptional customer service and the furniture exceeded all expectations. The dining table is the centerpiece of our home now."</p>
+       <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-stone-300 rounded-full flex items-center justify-center text-stone-700 font-bold">
+         JC
+        </div>
+        <div>
+         <p class="font-bold text-stone-900">James Chen</p>
+         <p class="text-stone-500 text-sm">Homeowner</p>
+        </div>
+       </div>
+      </div><!-- Testimonial 3 -->
+      <div class="bg-stone-50 rounded-3xl p-8 scale-in stagger-3 hover:shadow-lg transition-shadow">
+       <div class="flex gap-1 mb-4">
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewbox="0 0 20 20">
+         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+       </div>
+       <p class="text-stone-600 mb-6">"We furnished our entire office with Luxe Living pieces. The modern aesthetic and durability are perfect for our workspace."</p>
+       <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-700 font-bold">
+         EP
+        </div>
+        <div>
+         <p class="font-bold text-stone-900">Emma Patel</p>
+         <p class="text-stone-500 text-sm">Business Owner</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Contact Section -->
+   <section id="contact" class="py-24" style="background: linear-gradient(180deg, #faf7f2 0%, #f5ebe0 100%);">
+    <div class="max-w-7xl mx-auto px-6">
+     <div class="grid lg:grid-cols-2 gap-16"><!-- Contact Info -->
+      <div class="space-y-8">
+       <div><span class="text-amber-700 font-medium fade-in">Get In Touch</span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-stone-900 mt-2 fade-in stagger-1">Let's Create Your Dream Space</h2>
+        <p class="text-stone-600 mt-4 fade-in stagger-2">Visit our showroom or reach out to our design consultants for personalized assistance.</p>
+       </div>
+       <div class="space-y-6">
+        <div class="flex items-start gap-4 fade-in stagger-2">
+         <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+          <svg class="w-7 h-7 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+         </div>
+         <div>
+          <h4 class="font-bold text-stone-900 text-lg">Showroom</h4>
+          <p class="text-stone-600">123 Design District, Manhattan<br>
+           New York, NY 10001</p>
+         </div>
+        </div>
+        <div class="flex items-start gap-4 fade-in stagger-3">
+         <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+          <svg class="w-7 h-7 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+         </div>
+         <div>
+          <h4 class="font-bold text-stone-900 text-lg">Email Us</h4>
+          <p class="text-stone-600">hello@luxeliving.com</p>
+         </div>
+        </div>
+        <div class="flex items-start gap-4 fade-in stagger-4">
+         <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+          <svg class="w-7 h-7 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+         </div>
+         <div>
+          <h4 class="font-bold text-stone-900 text-lg">Call Us</h4>
+          <p class="text-stone-600">+1 (555) 123-4567</p>
+         </div>
+        </div>
+       </div>
+      </div><!-- Contact Form -->
+      <div class="bg-white rounded-3xl p-8 shadow-xl fade-in-right">
+       <form id="contactForm" class="space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+         <div><label for="firstName" class="block text-stone-700 font-medium mb-2">First Name</label> <input type="text" id="firstName" class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all outline-none" placeholder="John">
+         </div>
+         <div><label for="lastName" class="block text-stone-700 font-medium mb-2">Last Name</label> <input type="text" id="lastName" class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all outline-none" placeholder="Doe">
+         </div>
+        </div>
+        <div><label for="email" class="block text-stone-700 font-medium mb-2">Email</label> <input type="email" id="email" class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all outline-none" placeholder="john@example.com">
+        </div>
+        <div><label for="subject" class="block text-stone-700 font-medium mb-2">Subject</label> <select id="subject" class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all outline-none bg-white"> <option value="">Select a topic</option> <option value="consultation">Design Consultation</option> <option value="custom">Custom Order</option> <option value="support">Customer Support</option> <option value="other">Other</option> </select>
+        </div>
+        <div><label for="message" class="block text-stone-700 font-medium mb-2">Message</label> <textarea id="message" rows="4" class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all outline-none resize-none" placeholder="Tell us about your project..."></textarea>
+        </div><button type="submit" class="btn-primary w-full bg-amber-700 text-white py-4 rounded-xl font-medium hover:bg-amber-800 transition-colors"> Send Message </button>
+       </form>
+       <p id="formSuccess" class="hidden mt-4 text-green-600 text-center font-medium">✓ Message sent successfully!</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- Footer -->
+   <footer class="bg-stone-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-6">
+     <div class="grid md:grid-cols-4 gap-12 mb-12"><!-- Brand -->
+      <div class="space-y-4">
+       <div class="flex items-center gap-2">
+        <svg class="w-10 h-10" viewbox="0 0 50 50" fill="none"><rect x="5" y="20" width="40" height="25" rx="2" fill="#A68B5B" /> <rect x="10" y="10" width="30" height="12" rx="1" fill="#C9A882" /> <circle cx="15" cy="48" r="3" fill="#8B7355" /> <circle cx="35" cy="48" r="3" fill="#8B7355" />
+        </svg><span class="font-display text-2xl font-bold">Luxe Living</span>
+       </div>
+       <p class="text-stone-400">Crafting beautiful furniture that transforms houses into homes since 1999.</p>
+       <div class="flex gap-4"><a href="#" class="w-10 h-10 bg-stone-800 rounded-full flex items-center justify-center hover:bg-amber-700 transition-colors">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+          <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+         </svg></a> <a href="#" class="w-10 h-10 bg-stone-800 rounded-full flex items-center justify-center hover:bg-amber-700 transition-colors">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+         </svg></a> <a href="#" class="w-10 h-10 bg-stone-800 rounded-full flex items-center justify-center hover:bg-amber-700 transition-colors">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+         </svg></a>
+       </div>
+      </div><!-- Quick Links -->
+      <div>
+       <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+       <ul class="space-y-3">
+        <li><a href="#home" class="text-stone-400 hover:text-amber-400 transition-colors">Home</a></li>
+        <li><a href="#products" class="text-stone-400 hover:text-amber-400 transition-colors">Products</a></li>
+        <li><a href="#about" class="text-stone-400 hover:text-amber-400 transition-colors">About Us</a></li>
+        <li><a href="#collections" class="text-stone-400 hover:text-amber-400 transition-colors">Collections</a></li>
+        <li><a href="#contact" class="text-stone-400 hover:text-amber-400 transition-colors">Contact</a></li>
+       </ul>
+      </div><!-- Categories -->
+      <div>
+       <h4 class="font-bold text-lg mb-4">Categories</h4>
+       <ul class="space-y-3">
+        <li><a href="#" class="text-stone-400 hover:text-amber-400 transition-colors">Living Room</a></li>
+        <li><a href="#" class="text-stone-400 hover:text-amber-400 transition-colors">Bedroom</a></li>
+        <li><a href="#" class="text-stone-400 hover:text-amber-400 transition-colors">Dining</a></li>
+        <li><a href="#" class="text-stone-400 hover:text-amber-400 transition-colors">Office</a></li>
+        <li><a href="#" class="text-stone-400 hover:text-amber-400 transition-colors">Outdoor</a></li>
+       </ul>
+      </div><!-- Newsletter -->
+      <div>
+       <h4 class="font-bold text-lg mb-4">Newsletter</h4>
+       <p class="text-stone-400 mb-4">Subscribe for exclusive offers and design inspiration.</p>
+       <form id="newsletterForm" class="flex gap-2"><input type="email" placeholder="Your email" class="flex-1 px-4 py-3 rounded-xl bg-stone-800 border border-stone-700 focus:border-amber-500 outline-none text-white placeholder-stone-500"> <button type="submit" class="px-4 py-3 bg-amber-700 rounded-xl hover:bg-amber-600 transition-colors">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+         </svg></button>
+       </form>
+      </div>
+     </div>
+     <div class="border-t border-stone-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-stone-500 text-sm">© 2024 Luxe Living. All rights reserved.</p>
+      <div class="flex gap-6"><a href="#" class="text-stone-500 text-sm hover:text-amber-400 transition-colors">Privacy Policy</a> <a href="#" class="text-stone-500 text-sm hover:text-amber-400 transition-colors">Terms of Service</a> <a href="#" class="text-stone-500 text-sm hover:text-amber-400 transition-colors">Cookie Policy</a>
+      </div>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      hero_title: 'Crafting Comfort, <br><span class="text-amber-700">Defining Style</span>',
+      hero_subtitle: 'Discover handcrafted furniture that transforms your space into a sanctuary of elegance and comfort.',
+      about_title: 'Where Artistry Meets Functionality',
+      cta_button_text: 'Explore Collection',
+      background_color: '#faf7f2',
+      surface_color: '#ffffff',
+      text_color: '#292524',
+      primary_action_color: '#b45309',
+      secondary_action_color: '#1c1917',
+      font_family: 'Playfair Display',
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...defaultConfig, ...newConfig };
+          
+          // Update hero title
+          const heroTitle = document.getElementById('hero-title');
+          if (heroTitle) heroTitle.innerHTML = config.hero_title || defaultConfig.hero_title;
+          
+          // Update hero subtitle
+          const heroSubtitle = document.getElementById('hero-subtitle');
+          if (heroSubtitle) heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+          
+          // Update about title
+          const aboutTitle = document.getElementById('about-title');
+          if (aboutTitle) aboutTitle.textContent = config.about_title || defaultConfig.about_title;
+          
+          // Update CTA button
+          const ctaButton = document.getElementById('cta-button');
+          if (ctaButton) {
+            const buttonText = config.cta_button_text || defaultConfig.cta_button_text;
+            ctaButton.innerHTML = `${buttonText} <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>`;
+          }
+          
+          // Apply colors
+          document.documentElement.style.setProperty('--bg-color', config.background_color || defaultConfig.background_color);
+          document.documentElement.style.setProperty('--surface-color', config.surface_color || defaultConfig.surface_color);
+          document.documentElement.style.setProperty('--text-color', config.text_color || defaultConfig.text_color);
+          document.documentElement.style.setProperty('--primary-action', config.primary_action_color || defaultConfig.primary_action_color);
+          document.documentElement.style.setProperty('--secondary-action', config.secondary_action_color || defaultConfig.secondary_action_color);
+          
+          // Apply font
+          const fontFamily = config.font_family || defaultConfig.font_family;
+          document.querySelectorAll('.font-display').forEach(el => {
+            el.style.fontFamily = `${fontFamily}, serif`;
+          });
+          
+          // Apply font size scaling
+          const fontSize = config.font_size || defaultConfig.font_size;
+          document.documentElement.style.fontSize = `${fontSize}px`;
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => { config.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => { config.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => { config.primary_action_color = value; window.elementSdk.setConfig({ primary_action_color: value }); }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => { config.secondary_action_color = value; window.elementSdk.setConfig({ secondary_action_color: value }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['hero_title', config.hero_title || defaultConfig.hero_title],
+          ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+          ['about_title', config.about_title || defaultConfig.about_title],
+          ['cta_button_text', config.cta_button_text || defaultConfig.cta_button_text]
+        ])
+      });
+    }
+
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    const appWrapper = document.getElementById('app-wrapper');
+    
+    appWrapper.addEventListener('scroll', () => {
+      if (appWrapper.scrollTop > 50) {
+        navbar.classList.add('scrolled', 'bg-white/90');
+      } else {
+        navbar.classList.remove('scrolled', 'bg-white/90');
+      }
+    });
+
+    // Mobile menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = document.getElementById('closeMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('open');
+    });
+
+    closeMenu.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('open');
+    });
+
+    // Close mobile menu when clicking a link
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('open');
+      });
+    });
+
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+      root: appWrapper,
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all animated elements
+    document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .scale-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Contact form handling
+    const contactForm = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Simulate form submission
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        formSuccess.classList.remove('hidden');
+        contactForm.reset();
+        submitBtn.textContent = 'Send Message';
+        submitBtn.disabled = false;
+        
+        setTimeout(() => {
+          formSuccess.classList.add('hidden');
+        }, 3000);
+      }, 1000);
+    });
+
+    // Newsletter form handling
+    const newsletterForm = document.getElementById('newsletterForm');
+    
+    newsletterForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = newsletterForm.querySelector('input');
+      const btn = newsletterForm.querySelector('button');
+      
+      btn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+      
+      setTimeout(() => {
+        btn.innerHTML = '<svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+        input.value = '';
+        input.placeholder = 'Subscribed!';
+        
+        setTimeout(() => {
+          btn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>';
+          input.placeholder = 'Your email';
+        }, 2000);
+      }, 1000);
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Trigger initial animations for elements in view
+    setTimeout(() => {
+      document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .scale-in').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          el.classList.add('visible');
+        }
+      });
+    }, 100);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c5ed19ed11f595d',t:'MTc2OTc1MzU1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
