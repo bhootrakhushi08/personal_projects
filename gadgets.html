@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechGear - Premium Gadgets</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .font-mono {
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Background gradient animation */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .animated-bg {
+      background: linear-gradient(-45deg, #0a0e27, #1a1f3a, #0f1628, #1e2847);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+    }
+
+    /* Navbar glow effect */
+    .navbar {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(10, 14, 39, 0.7);
+      backdrop-filter: blur(10px);
+    }
+
+    .navbar.scrolled {
+      background: rgba(10, 14, 39, 0.95);
+      box-shadow: 0 8px 32px rgba(0, 255, 200, 0.1);
+      backdrop-filter: blur(20px);
+    }
+
+    /* Glow text effect */
+    .glow-text {
+      background: linear-gradient(135deg, #00ffc8 0%, #00d4ff 50%, #0099ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(0, 255, 200, 0.3));
+    }
+
+    /* Product card animations */
+    .product-card {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(0, 255, 200, 0.1);
+      background: rgba(26, 31, 58, 0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 255, 200, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-15px) scale(1.02);
+      border-color: rgba(0, 255, 200, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 255, 200, 0.15), inset 0 0 20px rgba(0, 255, 200, 0.05);
+    }
+
+    .product-card:hover::before {
+      opacity: 1;
+      animation: rotateLighting 2s linear infinite;
+    }
+
+    @keyframes rotateLighting {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(0, 0) rotate(360deg); }
+    }
+
+    .product-image {
+      transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: brightness(1) drop-shadow(0 0 0px rgba(0, 255, 200, 0));
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.1) rotateZ(2deg);
+      filter: brightness(1.1) drop-shadow(0 0 20px rgba(0, 255, 200, 0.4));
+    }
+
+    /* Quick view button */
+    .quick-view {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .product-card:hover .quick-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered animation on load */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-up {
+      animation: fadeSlideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      opacity: 0;
+    }
+
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-500 { animation-delay: 0.5s; }
+    .delay-600 { animation-delay: 0.6s; }
+    .delay-700 { animation-delay: 0.7s; }
+    .delay-800 { animation-delay: 0.8s; }
+
+    /* Hero float effect */
+    @keyframes floatHero {
+      0%, 100% { transform: translateY(0px) rotateZ(-2deg); }
+      50% { transform: translateY(-30px) rotateZ(2deg); }
+    }
+
+    .hero-float {
+      animation: floatHero 6s ease-in-out infinite;
+    }
+
+    /* Pulsing glow */
+    @keyframes pulsGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 200, 0.5); }
+      50% { box-shadow: 0 0 40px rgba(0, 255, 200, 0.8); }
+    }
+
+    .pulse-glow {
+      animation: pulsGlow 2s ease-in-out infinite;
+    }
+
+    /* Tech specs animation */
+    @keyframes scanLines {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    .scan-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 200, 0.3), transparent);
+      animation: scanLines 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* Category badge */
+    .badge-glow {
+      background: rgba(0, 255, 200, 0.1);
+      border: 1px solid rgba(0, 255, 200, 0.3);
+      color: #00ffc8;
+      transition: all 0.4s ease;
+    }
+
+    .badge-glow:hover {
+      background: rgba(0, 255, 200, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 200, 0.4);
+    }
+
+    /* Button glow effect */
+    .btn-glow {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      background: linear-gradient(135deg, rgba(0, 255, 200, 0.1), rgba(0, 212, 255, 0.1));
+      border: 1px solid rgba(0, 255, 200, 0.5);
+      color: #00ffc8;
+    }
+
+    .btn-glow:hover {
+      background: linear-gradient(135deg, rgba(0, 255, 200, 0.2), rgba(0, 212, 255, 0.2));
+      box-shadow: 0 0 20px rgba(0, 255, 200, 0.5), inset 0 0 20px rgba(0, 255, 200, 0.1);
+      border-color: rgba(0, 255, 200, 0.8);
+      transform: translateY(-2px);
+    }
+
+    /* Floating particles */
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(15px, -15px) rotate(8deg); }
+      66% { transform: translate(-10px, 10px) rotate(-5deg); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(-15px, 15px) rotate(-8deg); }
+      66% { transform: translate(10px, -10px) rotate(5deg); }
+    }
+
+    .float-1 { animation: float1 8s ease-in-out infinite; }
+    .float-2 { animation: float2 10s ease-in-out infinite; }
+
+    /* Smooth scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0e27;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #00ffc8, #00d4ff);
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(to bottom, #00d4ff, #0099ff);
+    }
+
+    /* Section reveal */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .section-reveal {
+      animation: slideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      opacity: 0;
+    }
+
+    /* Category hover */
+    .category-item {
+      position: relative;
+      transition: all 0.5s ease;
+    }
+
+    .category-item:hover {
+      transform: translateY(-8px);
+    }
+
+    .category-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00ffc8, #00d4ff);
+      transition: width 0.5s ease;
+    }
+
+    .category-item:hover::after {
+      width: 100%;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full text-white overflow-auto">
+  <div class="app-wrapper w-full min-h-full animated-bg"><!-- Navbar -->
+   <nav class="navbar fixed top-0 left-0 right-0 z-50 px-6 py-4 lg:px-12">
+    <div class="max-w-7xl mx-auto flex items-center justify-between"><!-- Logo --> <a href="#" class="flex items-center gap-3 animate-fade-up">
+      <div class="w-10 h-10 bg-gradient-to-br from-[#00ffc8] to-[#0099ff] rounded-lg flex items-center justify-center font-mono font-bold text-[#0a0e27]">
+       ⚡
+      </div><span id="store-name" class="font-mono text-xl font-bold tracking-wider">TECHGEAR</span> </a> <!-- Nav Links -->
+     <div class="hidden md:flex items-center gap-8 animate-fade-up delay-100"><a href="#" class="text-sm tracking-widest uppercase text-gray-300 hover:text-[#00ffc8] transition-colors relative group"> Products <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#00ffc8] group-hover:w-full transition-all duration-300"></span> </a> <a href="#" class="text-sm tracking-widest uppercase text-gray-300 hover:text-[#00ffc8] transition-colors relative group"> Categories <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#00ffc8] group-hover:w-full transition-all duration-300"></span> </a> <a href="#" class="text-sm tracking-widest uppercase text-gray-300 hover:text-[#00ffc8] transition-colors relative group"> Deals <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#00ffc8] group-hover:w-full transition-all duration-300"></span> </a> <a href="#" class="text-sm tracking-widest uppercase text-gray-300 hover:text-[#00ffc8] transition-colors relative group"> Support <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#00ffc8] group-hover:w-full transition-all duration-300"></span> </a>
+     </div><!-- Icons -->
+     <div class="flex items-center gap-6 animate-fade-up delay-200"><button class="text-gray-300 hover:text-[#00ffc8] transition-colors">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+       </svg></button> <button class="text-gray-300 hover:text-[#00ffc8] transition-colors">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+       </svg></button> <button class="relative text-gray-300 hover:text-[#00ffc8] transition-colors">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+       </svg><span class="absolute -top-2 -right-2 w-4 h-4 bg-[#00ffc8] rounded-full text-[10px] font-bold text-[#0a0e27] flex items-center justify-center pulse-glow">5</span> </button> <button class="md:hidden text-gray-300 hover:text-[#00ffc8] transition-colors">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+       </svg></button>
+     </div>
+    </div>
+   </nav><!-- Hero Section -->
+   <section class="relative min-h-[90%] flex items-center overflow-hidden pt-20"><!-- Background particles -->
+    <div class="absolute inset-0 overflow-hidden">
+     <div class="float-1 absolute top-32 right-10 w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl"></div>
+     <div class="float-2 absolute bottom-20 left-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+     <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-[#00ffc8]/5 rounded-full blur-3xl animate-pulse"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 items-center relative z-10"><!-- Hero Content -->
+     <div class="space-y-8">
+      <div class="animate-fade-up delay-300"><span class="inline-block px-4 py-2 badge-glow rounded-full text-xs font-mono tracking-widest uppercase"> 🚀 Latest Tech 2024 </span>
+      </div>
+      <h1 id="hero-title" class="text-5xl md:text-7xl lg:text-8xl font-bold leading-none font-mono animate-fade-up delay-400"><span class="glow-text">Future</span><br><span class="text-white">Technology</span></h1>
+      <p id="hero-subtitle" class="text-gray-400 text-lg max-w-lg leading-relaxed animate-fade-up delay-500">Discover cutting-edge gadgets that redefine the way you work, play, and connect. Premium tech for the modern innovator.</p>
+      <div class="flex flex-wrap gap-4 animate-fade-up delay-600"><button class="btn-glow px-8 py-4 font-mono font-bold tracking-wider uppercase text-sm rounded-lg"> Explore Now </button> <button class="px-8 py-4 font-mono font-bold tracking-wider uppercase text-sm border border-gray-600 hover:border-[#00ffc8] rounded-lg transition-all hover:text-[#00ffc8]"> View Specs </button>
+      </div>
+     </div><!-- Hero Image -->
+     <div class="relative hero-float animate-fade-up delay-500">
+      <div class="relative">
+       <div class="absolute -inset-6 bg-gradient-to-br from-[#00ffc8]/20 to-[#0099ff]/10 rounded-3xl blur-3xl"></div><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&amp;h=700&amp;fit=crop&amp;q=80" alt="Premium wireless earbuds" loading="lazy" class="relative rounded-3xl w-full max-w-lg mx-auto object-cover shadow-2xl border border-[#00ffc8]/20" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+       <div class="scan-effect"></div>
+      </div><!-- Feature badge -->
+      <div class="absolute -bottom-6 -left-6 bg-[#0a0e27]/90 backdrop-blur p-6 rounded-2xl border border-[#00ffc8]/30 animate-fade-up delay-700">
+       <div class="text-2xl font-mono font-bold glow-text">
+        4.9★
+       </div>
+       <div class="text-xs text-gray-400 font-mono">
+        2,547 Reviews
+       </div>
+      </div>
+     </div>
+    </div><!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-up delay-800"><span class="text-xs tracking-widest text-gray-500 uppercase font-mono">Scroll</span>
+     <svg class="w-6 h-6 text-[#00ffc8] animate-bounce" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+     </svg>
+    </div>
+   </section><!-- Categories Section -->
+   <section class="py-24 px-6 lg:px-12 relative z-10">
+    <div class="max-w-7xl mx-auto">
+     <div class="text-center mb-16"><span class="inline-block px-4 py-2 badge-glow rounded-full text-xs font-mono tracking-widest uppercase mb-6">Categories</span>
+      <h2 class="text-4xl md:text-5xl font-bold font-mono"><span class="glow-text">Shop by</span> Device Type</h2>
+     </div>
+     <div class="grid md:grid-cols-4 gap-6"><!-- Category 1 -->
+      <div class="category-item group">
+       <div class="relative overflow-hidden rounded-2xl h-64 bg-gradient-to-br from-[#1a1f3a] to-[#0f1628] border border-[#00ffc8]/20 group-hover:border-[#00ffc8]/50 transition-all cursor-pointer"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&amp;h=400&amp;fit=crop&amp;q=80" alt="Earbuds &amp; Headphones" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0e27] via-transparent to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+         <h3 class="font-mono font-bold text-lg mb-1">Audio</h3>
+         <p class="text-xs text-gray-400">142 Products</p>
+        </div>
+       </div>
+      </div><!-- Category 2 -->
+      <div class="category-item group">
+       <div class="relative overflow-hidden rounded-2xl h-64 bg-gradient-to-br from-[#1a1f3a] to-[#0f1628] border border-[#00ffc8]/20 group-hover:border-[#00ffc8]/50 transition-all cursor-pointer"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&amp;h=400&amp;fit=crop&amp;q=80" alt="Smartwatches" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0e27] via-transparent to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+         <h3 class="font-mono font-bold text-lg mb-1">Wearables</h3>
+         <p class="text-xs text-gray-400">98 Products</p>
+        </div>
+       </div>
+      </div><!-- Category 3 -->
+      <div class="category-item group">
+       <div class="relative overflow-hidden rounded-2xl h-64 bg-gradient-to-br from-[#1a1f3a] to-[#0f1628] border border-[#00ffc8]/20 group-hover:border-[#00ffc8]/50 transition-all cursor-pointer"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&amp;h=400&amp;fit=crop&amp;q=80" alt="Laptops &amp; Tablets" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0e27] via-transparent to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+         <h3 class="font-mono font-bold text-lg mb-1">Computing</h3>
+         <p class="text-xs text-gray-400">76 Products</p>
+        </div>
+       </div>
+      </div><!-- Category 4 -->
+      <div class="category-item group">
+       <div class="relative overflow-hidden rounded-2xl h-64 bg-gradient-to-br from-[#1a1f3a] to-[#0f1628] border border-[#00ffc8]/20 group-hover:border-[#00ffc8]/50 transition-all cursor-pointer"><img src="https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=400&amp;h=400&amp;fit=crop&amp;q=80" alt="Cameras" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0e27] via-transparent to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+         <h3 class="font-mono font-bold text-lg mb-1">Cameras</h3>
+         <p class="text-xs text-gray-400">64 Products</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Featured Products -->
+   <section class="py-24 px-6 lg:px-12 relative z-10 bg-gradient-to-b from-transparent via-[#0f1628]/50 to-transparent">
+    <div class="max-w-7xl mx-auto">
+     <div class="flex flex-wrap items-end justify-between gap-4 mb-16">
+      <div><span class="inline-block px-4 py-2 badge-glow rounded-full text-xs font-mono tracking-widest uppercase mb-6">Featured</span>
+       <h2 class="text-4xl md:text-5xl font-bold font-mono"><span class="glow-text">Trending</span> Products</h2>
+      </div><a href="#" class="text-[#00ffc8] text-sm font-mono tracking-wider uppercase hover:text-white transition-colors flex items-center gap-2 group"> View All 
+       <svg class="w-4 h-4 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+       </svg></a>
+     </div>
+     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8" id="products-grid"><!-- Product 1 -->
+      <div class="product-card rounded-2xl p-4 group">
+       <div class="relative bg-gradient-to-br from-[#1a1f3a] to-[#0f1628] rounded-xl overflow-hidden mb-4 h-72 flex items-center justify-center"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&amp;h=400&amp;fit=crop&amp;q=80" alt="Premium Wireless Earbuds" loading="lazy" class="product-image w-full h-full object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+        <div class="quick-view absolute inset-x-4 bottom-4"><button class="w-full bg-[#00ffc8] text-[#0a0e27] py-3 font-mono font-bold tracking-wider uppercase text-xs hover:bg-white transition-all rounded-lg"> Quick View </button>
+        </div>
+        <div class="absolute top-4 left-4 px-3 py-1 badge-glow rounded-full text-xs font-mono font-bold">
+         NEW
+        </div><button class="absolute top-4 right-4 w-10 h-10 bg-[#0a0e27]/80 border border-[#00ffc8]/30 rounded-full flex items-center justify-center text-[#00ffc8] hover:bg-[#00ffc8] hover:text-[#0a0e27] transition-all">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+         </svg></button>
+       </div>
+       <div class="space-y-2"><span class="text-xs tracking-widest uppercase text-[#00ffc8] font-mono">Audio Gear</span>
+        <h3 class="font-mono font-bold text-lg">Pro Wireless Earbuds</h3>
+        <p class="text-sm text-gray-400">40hr Battery • ANC • Premium Sound</p>
+        <div class="flex items-center justify-between pt-2">
+         <div class="flex items-center gap-2"><span class="text-[#00ffc8] font-mono font-bold text-lg">$299</span> <span class="text-gray-600 line-through text-sm">$399</span>
+         </div><span class="text-xs text-[#00ffc8] font-mono">-25%</span>
+        </div>
+       </div>
+      </div><!-- Product 2 -->
+      <div class="product-card rounded-2xl p-4 group">
+       <div class="relative bg-gradient-to-br from-[#1a1f3a] to-[#0f1628] rounded-xl overflow-hidden mb-4 h-72 flex items-center justify-center"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&amp;h=400&amp;fit=crop&amp;q=80" alt="Smart Watch Pro" loading="lazy" class="product-image w-full h-full object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+        <div class="quick-view absolute inset-x-4 bottom-4"><button class="w-full bg-[#00ffc8] text-[#0a0e27] py-3 font-mono font-bold tracking-wider uppercase text-xs hover:bg-white transition-all rounded-lg"> Quick View </button>
+        </div><button class="absolute top-4 right-4 w-10 h-10 bg-[#0a0e27]/80 border border-[#00ffc8]/30 rounded-full flex items-center justify-center text-[#00ffc8] hover:bg-[#00ffc8] hover:text-[#0a0e27] transition-all">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+         </svg></button>
+       </div>
+       <div class="space-y-2"><span class="text-xs tracking-widest uppercase text-[#00ffc8] font-mono">Wearables</span>
+        <h3 class="font-mono font-bold text-lg">Smart Watch Pro</h3>
+        <p class="text-sm text-gray-400">AMOLED • Heart Rate • GPS</p>
+        <div class="flex items-center justify-between pt-2"><span class="text-[#00ffc8] font-mono font-bold text-lg">$349</span>
+         <div class="flex gap-1"><span class="text-xs text-[#00d4ff]">⭐⭐⭐⭐⭐</span>
+         </div>
+        </div>
+       </div>
+      </div><!-- Product 3 -->
+      <div class="product-card rounded-2xl p-4 group">
+       <div class="relative bg-gradient-to-br from-[#1a1f3a] to-[#0f1628] rounded-xl overflow-hidden mb-4 h-72 flex items-center justify-center"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&amp;h=400&amp;fit=crop&amp;q=80" alt="4K Webcam" loading="lazy" class="product-image w-full h-full object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+        <div class="quick-view absolute inset-x-4 bottom-4"><button class="w-full bg-[#00ffc8] text-[#0a0e27] py-3 font-mono font-bold tracking-wider uppercase text-xs hover:bg-white transition-all rounded-lg"> Quick View </button>
+        </div>
+        <div class="absolute top-4 left-4 px-3 py-1 bg-red-500/80 border border-red-400 text-white rounded-full text-xs font-mono font-bold">
+         -35%
+        </div><button class="absolute top-4 right-4 w-10 h-10 bg-[#0a0e27]/80 border border-[#00ffc8]/30 rounded-full flex items-center justify-center text-[#00ffc8] hover:bg-[#00ffc8] hover:text-[#0a0e27] transition-all">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+         </svg></button>
+       </div>
+       <div class="space-y-2"><span class="text-xs tracking-widest uppercase text-[#00ffc8] font-mono">Computing</span>
+        <h3 class="font-mono font-bold text-lg">4K Ultra Webcam</h3>
+        <p class="text-sm text-gray-400">4K UHD • Auto Focus • USB-C</p>
+        <div class="flex items-center justify-between pt-2">
+         <div class="flex items-center gap-2"><span class="text-[#00ffc8] font-mono font-bold text-lg">$179</span> <span class="text-gray-600 line-through text-sm">$279</span>
+         </div>
+        </div>
+       </div>
+      </div><!-- Product 4 -->
+      <div class="product-card rounded-2xl p-4 group">
+       <div class="relative bg-gradient-to-br from-[#1a1f3a] to-[#0f1628] rounded-xl overflow-hidden mb-4 h-72 flex items-center justify-center"><img src="https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=400&amp;h=400&amp;fit=crop&amp;q=80" alt="Mirrorless Camera" loading="lazy" class="product-image w-full h-full object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+        <div class="quick-view absolute inset-x-4 bottom-4"><button class="w-full bg-[#00ffc8] text-[#0a0e27] py-3 font-mono font-bold tracking-wider uppercase text-xs hover:bg-white transition-all rounded-lg"> Quick View </button>
+        </div><button class="absolute top-4 right-4 w-10 h-10 bg-[#0a0e27]/80 border border-[#00ffc8]/30 rounded-full flex items-center justify-center text-[#00ffc8] hover:bg-[#00ffc8] hover:text-[#0a0e27] transition-all">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+         </svg></button>
+       </div>
+       <div class="space-y-2"><span class="text-xs tracking-widest uppercase text-[#00ffc8] font-mono">Cameras</span>
+        <h3 class="font-mono font-bold text-lg">Mirrorless Pro 45MP</h3>
+        <p class="text-sm text-gray-400">45MP • 8K Video • Full Frame</p>
+        <div class="flex items-center justify-between pt-2"><span class="text-[#00ffc8] font-mono font-bold text-lg">$2,499</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Specs Showcase -->
+   <section class="py-24 px-6 lg:px-12 relative z-10">
+    <div class="max-w-7xl mx-auto">
+     <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-8">
+       <div><span class="inline-block px-4 py-2 badge-glow rounded-full text-xs font-mono tracking-widest uppercase mb-6">Why Choose Us</span>
+        <h2 class="text-4xl md:text-5xl font-bold font-mono leading-tight"><span class="glow-text">Performance</span> That Matters</h2>
+       </div>
+       <div class="space-y-6">
+        <div class="flex gap-4 p-4 bg-[#1a1f3a]/50 rounded-xl border border-[#00ffc8]/20 hover:border-[#00ffc8]/50 transition-all hover:bg-[#1a1f3a]/80">
+         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-[#00ffc8] to-[#0099ff] flex items-center justify-center flex-shrink-0"><span class="text-xl font-bold text-[#0a0e27]">⚡</span>
+         </div>
+         <div>
+          <h3 class="font-mono font-bold text-lg mb-1">Lightning Fast</h3>
+          <p class="text-sm text-gray-400">Ultra-responsive performance with latest processors</p>
+         </div>
+        </div>
+        <div class="flex gap-4 p-4 bg-[#1a1f3a]/50 rounded-xl border border-[#00ffc8]/20 hover:border-[#00ffc8]/50 transition-all hover:bg-[#1a1f3a]/80">
+         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-[#00ffc8] to-[#0099ff] flex items-center justify-center flex-shrink-0"><span class="text-xl font-bold text-[#0a0e27]">🔋</span>
+         </div>
+         <div>
+          <h3 class="font-mono font-bold text-lg mb-1">All Day Battery</h3>
+          <p class="text-sm text-gray-400">Extended usage time with intelligent power management</p>
+         </div>
+        </div>
+        <div class="flex gap-4 p-4 bg-[#1a1f3a]/50 rounded-xl border border-[#00ffc8]/20 hover:border-[#00ffc8]/50 transition-all hover:bg-[#1a1f3a]/80">
+         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-[#00ffc8] to-[#0099ff] flex items-center justify-center flex-shrink-0"><span class="text-xl font-bold text-[#0a0e27]">🛡️</span>
+         </div>
+         <div>
+          <h3 class="font-mono font-bold text-lg mb-1">Premium Security</h3>
+          <p class="text-sm text-gray-400">Advanced encryption and biometric authentication</p>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="relative h-96"><img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&amp;h=700&amp;fit=crop&amp;q=80" alt="Tech specification showcase" loading="lazy" class="w-full h-full object-cover rounded-2xl border border-[#00ffc8]/30" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg, #1a1f3a 0%, #0f1628 100%)'; this.alt='Image unavailable';">
+       <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#0a0e27] via-transparent to-transparent"></div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Newsletter -->
+   <section class="py-24 px-6 lg:px-12 relative z-10">
+    <div class="max-w-3xl mx-auto">
+     <div class="bg-gradient-to-br from-[#1a1f3a]/80 to-[#0f1628]/80 border border-[#00ffc8]/30 rounded-3xl p-8 md:p-12 text-center backdrop-blur"><span class="inline-block px-4 py-2 badge-glow rounded-full text-xs font-mono tracking-widest uppercase mb-6">Stay Updated</span>
+      <h2 class="text-3xl md:text-4xl font-bold font-mono mb-4">Get <span class="glow-text">Early Access</span> to New Releases</h2>
+      <p class="text-gray-400 text-lg mb-8">Subscribe for exclusive tech launches, special discounts, and expert reviews straight to your inbox.</p>
+      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto" onsubmit="event.preventDefault(); handleSubscribe();"><input type="email" placeholder="Enter your email" class="flex-1 bg-[#0a0e27]/80 border border-[#00ffc8]/30 rounded-lg px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#00ffc8] transition-all font-mono" required> <button type="submit" class="btn-glow px-8 py-4 font-mono font-bold tracking-wider uppercase text-sm rounded-lg whitespace-nowrap"> Subscribe </button>
+      </form>
+      <p id="subscribe-message" class="mt-4 text-sm text-[#00ffc8] font-mono hidden">✓ Thanks for subscribing!</p>
+     </div>
+    </div>
+   </section><!-- Footer -->
+   <footer class="py-16 px-6 lg:px-12 border-t border-[#00ffc8]/10 relative z-10">
+    <div class="max-w-7xl mx-auto">
+     <div class="grid md:grid-cols-4 gap-12 mb-12"><!-- Brand -->
+      <div class="space-y-6">
+       <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-[#00ffc8] to-[#0099ff] rounded-lg flex items-center justify-center font-mono font-bold text-[#0a0e27]">
+         ⚡
+        </div><span class="font-mono text-xl font-bold tracking-wider">TECHGEAR</span>
+       </div>
+       <p class="text-gray-400 text-sm leading-relaxed">Premium gadgets for tech enthusiasts. Curating the best in innovation since 2020.</p>
+       <div class="flex gap-4"><a href="#" class="w-10 h-10 bg-[#1a1f3a] border border-[#00ffc8]/30 rounded-full flex items-center justify-center text-[#00ffc8] hover:bg-[#00ffc8] hover:text-[#0a0e27] transition-all">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+          <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+         </svg></a> <a href="#" class="w-10 h-10 bg-[#1a1f3a] border border-[#00ffc8]/30 rounded-full flex items-center justify-center text-[#00ffc8] hover:bg-[#00ffc8] hover:text-[#0a0e27] transition-all">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+         </svg></a> <a href="#" class="w-10 h-10 bg-[#1a1f3a] border border-[#00ffc8]/30 rounded-full flex items-center justify-center text-[#00ffc8] hover:bg-[#00ffc8] hover:text-[#0a0e27] transition-all">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+          <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+         </svg></a>
+       </div>
+      </div><!-- Quick Links -->
+      <div>
+       <h4 class="font-mono font-bold text-sm tracking-widest uppercase mb-6 text-[#00ffc8]">Shop</h4>
+       <ul class="space-y-4">
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">New Arrivals</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Best Sellers</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Hot Deals</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Gift Cards</a></li>
+       </ul>
+      </div><!-- Support -->
+      <div>
+       <h4 class="font-mono font-bold text-sm tracking-widest uppercase mb-6 text-[#00ffc8]">Support</h4>
+       <ul class="space-y-4">
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Contact Us</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Shipping Info</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Returns</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Track Order</a></li>
+       </ul>
+      </div><!-- Company -->
+      <div>
+       <h4 class="font-mono font-bold text-sm tracking-widest uppercase mb-6 text-[#00ffc8]">Company</h4>
+       <ul class="space-y-4">
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">About Us</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Blog</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Careers</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-[#00ffc8] transition-colors text-sm">Press</a></li>
+       </ul>
+      </div>
+     </div>
+     <div class="pt-8 border-t border-[#00ffc8]/10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
+      <p class="text-gray-500 font-mono">© 2024 TECHGEAR. All rights reserved.</p>
+      <div class="flex gap-8"><a href="#" class="text-gray-500 hover:text-[#00ffc8] transition-colors font-mono">Privacy Policy</a> <a href="#" class="text-gray-500 hover:text-[#00ffc8] transition-colors font-mono">Terms of Service</a> <a href="#" class="text-gray-500 hover:text-[#00ffc8] transition-colors font-mono">Cookie Policy</a>
+      </div>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      store_name: 'TECHGEAR',
+      hero_title: 'Future Technology',
+      hero_subtitle: 'Discover cutting-edge gadgets that redefine the way you work, play, and connect. Premium tech for the modern innovator.',
+      background_color: '#0a0e27',
+      surface_color: '#1a1f3a',
+      text_color: '#ffffff',
+      primary_action_color: '#00ffc8',
+      secondary_action_color: '#0099ff'
+    };
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          // Update store name
+          const storeNameEl = document.getElementById('store-name');
+          if (storeNameEl) {
+            storeNameEl.textContent = config.store_name || defaultConfig.store_name;
+          }
+
+          // Update hero title
+          const heroTitleEl = document.getElementById('hero-title');
+          if (heroTitleEl) {
+            const title = config.hero_title || defaultConfig.hero_title;
+            const words = title.split(' ');
+            if (words.length >= 2) {
+              heroTitleEl.innerHTML = `<span class="glow-text">${words[0]}</span><br><span class="text-white">${words.slice(1).join(' ')}</span>`;
+            } else {
+              heroTitleEl.innerHTML = `<span class="glow-text">${title}</span>`;
+            }
+          }
+
+          // Update hero subtitle
+          const heroSubtitleEl = document.getElementById('hero-subtitle');
+          if (heroSubtitleEl) {
+            heroSubtitleEl.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+          }
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => window.elementSdk.setConfig({ background_color: value })
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => window.elementSdk.setConfig({ surface_color: value })
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => window.elementSdk.setConfig({ text_color: value })
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => window.elementSdk.setConfig({ primary_action_color: value })
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => window.elementSdk.setConfig({ secondary_action_color: value })
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['store_name', config.store_name || defaultConfig.store_name],
+          ['hero_title', config.hero_title || defaultConfig.hero_title],
+          ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle]
+        ])
+      });
+    }
+
+    // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Newsletter subscription handler
+    function handleSubscribe() {
+      const messageEl = document.getElementById('subscribe-message');
+      messageEl.classList.remove('hidden');
+      setTimeout(() => {
+        messageEl.classList.add('hidden');
+      }, 4000);
+    }
+
+    // Add to cart animation (demo)
+    document.querySelectorAll('.quick-view button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const cartBadge = document.querySelector('.cart-badge');
+        const currentCount = parseInt(cartBadge.textContent);
+        cartBadge.textContent = currentCount + 1;
+
+        // Flash effect
+        cartBadge.style.transform = 'scale(1.5)';
+        setTimeout(() => {
+          cartBadge.style.transform = 'scale(1)';
+        }, 200);
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cb8247a354c54cc',t:'MTc3MDY5MDE4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
